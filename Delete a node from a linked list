@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+// Insert at end (to create list)
+struct Node* insertAtEnd(struct Node* head, int value) {
+    struct Node *newNode, *temp;
+
+    newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if(head == NULL)
+        return newNode;
+temp = head;
+    while(temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = newNode;
+    return head;
+}
+// Delete node by value
+struct Node* deleteNode(struct Node* head, int key) {
+    struct Node *temp = head, *prev = NULL;
+
+    // If head node itself holds the key
+    if(temp != NULL && temp->data == key) {
+        head = temp->next;
+        free(temp);
+        return head;
+    }
+// Search for the key
+    while(temp != NULL && temp->data != key) {
+        prev = temp;
+        temp = temp->next;
+    }
+// If key not found
+    if(temp == NULL) {
+        printf("Value not found in list.\n");
+        return head;
+    }
+// Unlink the node and free memory
+    prev->next = temp->next;
+    free(temp);
+
+    return head;
+}
+// Display list
+void display(struct Node* head) {
+    struct Node* temp = head;
+
+    while(temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+int main() {
+    struct Node* head = NULL;
+    int n, i, value, key;
+
+    printf("Enter number of nodes: ");
+    scanf("%d", &n);
+
+    for(i = 0; i < n; i++) {
+        printf("Enter data: ");
+        scanf("%d", &value);
+        head = insertAtEnd(head, value);
+    }
+printf("\nOriginal List:\n");
+    display(head);
+
+    printf("\nEnter value to delete: ");
+    scanf("%d", &key);
+
+    head = deleteNode(head, key);
+
+    printf("\nList after deletion:\n");
+    display(head);
+
+    return 0;
+}
