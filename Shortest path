@@ -1,0 +1,55 @@
+#include <stdio.h>
+#define MAX 10
+#define INF 9999
+
+int main() {
+    int cost[MAX][MAX], distance[MAX];
+    int visited[MAX] = {0};
+    int n, i, j, source, min, next;
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+printf("Enter cost adjacency matrix (Enter 0 if no edge):\n");
+    for(i = 0; i < n; i++) {
+        for(j = 0; j < n; j++) {
+            scanf("%d", &cost[i][j]);
+            if(cost[i][j] == 0)
+                cost[i][j] = INF;
+        }
+    }
+
+    printf("Enter source vertex: ");
+    scanf("%d", &source);
+// Initialize distances
+    for(i = 0; i < n; i++) {
+        distance[i] = cost[source][i];
+    }
+
+    visited[source] = 1;
+    distance[source] = 0;
+// Dijkstra's Algorithm
+    for(i = 0; i < n - 1; i++) {
+        min = INF;
+
+        for(j = 0; j < n; j++) {
+            if(!visited[j] && distance[j] < min) {
+                min = distance[j];
+                next = j;
+            }
+        }
+
+        visited[next] = 1;
+for(j = 0; j < n; j++) {
+            if(!visited[j] && min + cost[next][j] < distance[j]) {
+                distance[j] = min + cost[next][j];
+            }
+        }
+    }
+
+    printf("\nShortest distances from vertex %d:\n", source);
+    for(i = 0; i < n; i++) {
+        printf("To vertex %d = %d\n", i, distance[i]);
+    }
+
+    return 0;
+}
